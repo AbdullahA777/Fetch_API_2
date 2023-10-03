@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feching Data</title>
+
+    <style>
+        #btn {
+            width: 100px;
+            margin: auto;
+
+        }
+
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td,
+        th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+
+</head>
+
+<body onload="feching_func()">
+
+    <div id="btn"></div>
+    <h2 id="loading"></h2>
+
+    <div>
+        <table id="table">
+            <tr>
+                <th>Ids</th>
+                <th>Albums</th>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const encodedData = urlParams.get("data");
+        const decodedData = JSON.parse(decodeURIComponent(encodedData));
+        let table = document.getElementById('table')
+
+
+        function feching_func() {
+
+            let loading = document.querySelector('#loading');
+            loading.innerHTML = 'Fetching Data...';
+            url = 'https://jsonplaceholder.typicode.com/albums/1/photos'
+
+            fetch(url).then((response) => {
+                return response.json()
+            }).then((data) => {
+                let jsonObject = data
+                console.log(jsonObject);
+
+                // for (const key in jsonObject) {
+                    // if (jsonObject.hasOwnProperty(key) && decodedData.hasOwnProperty(key)) {
+                        
+                        const row = document.createElement("tr");
+                        const cell1 = document.createElement("td");
+                        const cell2 = document.createElement("td");
+
+                        // cell1.textContent = decodedData[key];
+                        // cell2.textContent = jsonObject[key].albumId;
+                        cell1.textContent = decodedData;
+                        cell2.textContent = jsonObject[decodedData].albumId;
+
+                        row.appendChild(cell1);
+                        row.appendChild(cell2);
+
+                        table.appendChild(row);
+                        loading.innerHTML = ''
+                    // }
+                // }
+            })
+        }
+    </script>
+
+</body>
+
+</html>
